@@ -35,13 +35,13 @@ class MQTTKeywords(object):
         self._messages = {}
         self._username = None
         self._password = None
-        #self._mqttc = mqtt.Client()
+        self._mqttc = mqtt.Client()
 
     def set_username_and_password(self, username, password=None):
         self._username = username
         self._password = password
 
-    def connect(self, broker, port=1883, client_id="", clean_session=True):
+    def connect(self, broker, port=1883, client_id="", clean_session=None, ca_cert="", certfile="", keyfile=""):
         """ Connect to an MQTT broker. This is a pre-requisite step for publish
         and subscribe keywords.
 
@@ -52,6 +52,12 @@ class MQTTKeywords(object):
         `client_id` if not specified, a random id is generated
 
         `clean_session` specifies the clean session flag for the connection
+        
+        'ca_cert' is the filepath to certificate authority file
+
+        'certfile' is the filepath to certificate file
+
+        'keyfile' is the filepath to CA key file
 
         Examples:
 
@@ -77,6 +83,7 @@ class MQTTKeywords(object):
         if self._username:
             self._mqttc.username_pw_set(self._username, self._password)
 
+        self._mqttc.tls_set(ca_certs, certfile, keyfile)
         self._mqttc.connect(broker, int(port))
 
         timer_start = time.time()
@@ -269,6 +276,8 @@ class MQTTKeywords(object):
 
         logger.info('Subscribing to topic: %s' % topic)
         self._payload = str(payload)
+        logger.info(payload)
+        logger.info(self._payload)
         self._mqttc.on_message = self._on_message
         self._mqttc.subscribe(str(topic), int(qos))
 
@@ -442,10 +451,10 @@ class MQTTKeywords(object):
             if topic_matches_sub(sub, message.topic):
                 self._messages[sub].append(payload)
 
-    def _on_connect(self, client, userdata, flags, rc):
+    def _on_connect(self, client, userdata, flags, rc, properties=None):
         self._connected = True if rc == 0 else False
 
-    def _on_disconnect(self, client, userdata, rc):
+    def _on_disconnect(self, client, userdata, rc, properties=None):
         if rc == 0:
             self._disconnected = True
             self._unexpected_disconnect = False
