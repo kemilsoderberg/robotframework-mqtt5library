@@ -1,9 +1,7 @@
 MQTTLibrary for Robot Framework
 ===============================
 
-[![image](https://travis-ci.org/randomsync/robotframework-mqttlibrary.svg?branch=master)](https://travis-ci.org/randomsync/robotframework-mqttlibrary)
-
-[![image](https://badge.fury.io/py/robotframework-mqttlibrary.svg)](https://badge.fury.io/py/robotframework-mqttlibrary)
+[![PyPI version](https://badge.fury.io/py/robotframework-mqtt5library.svg)](https://badge.fury.io/py/robotframework-mqtt5library)
 
 MQTTLibrary is a [Robot Framework](http://robotframework.org) library
 that provides keywords for testing on MQTT brokers.
