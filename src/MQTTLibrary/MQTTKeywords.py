@@ -83,7 +83,7 @@ class MQTTKeywords(object):
         if self._username:
             self._mqttc.username_pw_set(self._username, self._password)
 
-        self._mqttc.tls_set(ca_certs, certfile, keyfile)
+        self._mqttc.tls_set(ca_cert, certfile, keyfile)
         self._mqttc.connect(broker, int(port))
 
         timer_start = time.time()
